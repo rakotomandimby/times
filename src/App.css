@@ -38,6 +38,7 @@
   border-radius: 12px;
   background: var(--card-bg);
   box-sizing: border-box;
+  position: relative;
 }
 
 .clock-card h2 {
@@ -53,15 +54,127 @@
   color: var(--text);
 }
 
-.clock-card__select {
+/* Autocomplete styles */
+.autocomplete {
+  position: relative;
   width: 100%;
-  padding: 10px 12px;
+}
+
+.autocomplete__input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.autocomplete__input {
+  width: 100%;
+  padding: 12px 36px 12px 12px;
   font-size: 16px;
   border-radius: 8px;
   border: 1px solid var(--border);
   background: var(--bg);
   color: var(--text-h);
   box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+
+  &:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-bg);
+  }
+}
+
+.autocomplete__icon {
+  position: absolute;
+  right: 12px;
+  font-size: 14px;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.autocomplete__dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 240px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 6px 0;
+  list-style: none;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  z-index: 100;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+
+.autocomplete__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  font-size: 15px;
+  color: var(--text-h);
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.15s ease;
+
+  &--highlighted {
+    background: var(--accent-bg);
+    color: var(--accent);
+  }
+
+  &--selected {
+    font-weight: 600;
+  }
+}
+
+.autocomplete__item-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.autocomplete__item-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.autocomplete__item-meta {
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text);
+  opacity: 0.8;
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.35;
+}
+
+.autocomplete__item--highlighted .autocomplete__item-meta {
+  color: var(--accent);
+  opacity: 0.85;
+}
+
+.autocomplete__item-check {
+  font-size: 14px;
+  color: var(--accent);
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
+.autocomplete__no-results {
+  padding: 12px 14px;
+  font-size: 14px;
+  color: var(--text);
+  text-align: center;
 }
 
 .clock-card__display {

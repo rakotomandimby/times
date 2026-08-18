@@ -1,4 +1,5 @@
 import { formatTimeInZone } from '../utils/time.js'
+import CityAutocomplete from './CityAutocomplete.jsx'
 
 function ClockCard({
   id,
@@ -10,23 +11,17 @@ function ClockCard({
   onIncrement,
   onDecrement,
 }) {
-  const selectId = `${id}-timezone`
+  const inputId = `${id}-city-input`
   const timeLabel = formatTimeInZone(time, timezone)
 
   return (
     <section className="clock-card" aria-label={label}>
-      <select
-        id={selectId}
-        className="clock-card__select"
-        value={timezone}
-        onChange={(event) => onTimezoneChange(event.target.value)}
-      >
-        {timezoneOptions.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
+      <CityAutocomplete
+        id={inputId}
+        selectedTimezone={timezone}
+        options={timezoneOptions}
+        onSelect={onTimezoneChange}
+      />
 
       <div className="clock-card__display">
         <p className="clock-card__time">{timeLabel}</p>
