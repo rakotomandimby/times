@@ -1,122 +1,73 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import { useState, useMemo } from 'react'
+import ClockCard from './components/ClockCard.jsx'
+import { timezones } from './utils/timezones.js'
 import './App.css'
 
+const HOUR_IN_MS = 60 * 60 * 1000
+
+function isKnownTimezone(value) {
+  return timezones.some((timezone) => timezone.value === value)
+}
+
+function getFallbackTimezone(excludedValue) {
+  const fallback = timezones.find((timezone) => timezone.value !== excludedValue)
+  return fallback ? fallback.value : timezones[0].value
+}
+
+function getInitialTimezone() {
+  const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+  return isKnownTimezone(browserTimezone) ? browserTimezone : timezones[0].value
+}
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [currentTime, setCurrentTime] = useState(() => new Date())
+  const [timezone1, setTimezone1] = useState(getInitialTimezone)
+  const [timezone2, setTimezone2] = useState(() => getFallbackTimezone(getInitialTimezone()))
+
+  const timezoneOptions2 = useMemo(
+    () => timezones.filter((timezone) => timezone.value !== timezone1),
+    [timezone1],
+  )
+
+  const adjustTime = (hours) => {
+    setCurrentTime((previousTime) => new Date(previousTime.getTime() + hours * HOUR_IN_MS))
+  }
+
+  const handleTimezone1Change = (value) => {
+    setTimezone1(value)
+    if (value === timezone2) {
+      setTimezone2(getFallbackTimezone(value))
+    }
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+    <main id="app">
+      <h1>World Clock</h1>
+      <div className="clocks">
+        <ClockCard
+          id="clock-1"
+          label="Clock 1"
+          time={currentTime}
+          timezone={timezone1}
+          timezoneOptions={timezones}
+          onTimezoneChange={handleTimezone1Change}
+          onIncrement={() => adjustTime(1)}
+          onDecrement={() => adjustTime(-1)}
+        />
+        <ClockCard
+          id="clock-2"
+          label="Clock 2"
+          time={currentTime}
+          timezone={timezone2}
+          timezoneOptions={timezoneOptions2}
+          onTimezoneChange={setTimezone2}
+          onIncrement={() => adjustTime(1)}
+          onDecrement={() => adjustTime(-1)}
+        />
+      </div>
+    </main>
   )
 }
 
 export default App
+
