@@ -2,6 +2,8 @@
 
 A simple web application that displays the current time across three different time zones simultaneously, making it easy to compare times around the world.
 
+Online demo: https://times.rktmb.org/
+
 ## Features
 
 - **Three parallel clocks** — view the current time in three time zones side by side.
