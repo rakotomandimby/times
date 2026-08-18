@@ -1,0 +1,40 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ "master", "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: remove the .git directory
+        run: rm -rfv .git
+
+      - name: remove the .ai-* directories
+        run: rm -rfv .ai-*
+
+      - name: Configure SSH for scp
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -p 22 "${{ vars.FTP_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
+        with:
+          server: ${{ vars.FTP_HOST }}
+          username: ${{ vars.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ${{ vars.FTP_FOLDER }}
+          local-dir: ./
+          dangerous-clean-slate: true
+
+
