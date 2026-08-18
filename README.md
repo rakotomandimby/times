@@ -1,18 +1,52 @@
-# React + Vite
+# What Times?
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple web application that displays the current time across three different time zones simultaneously, making it easy to compare times around the world.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Three parallel clocks** — view the current time in three time zones side by side.
+- **City / timezone search** — each clock has a fuzzy-search autocomplete input backed by a comprehensive timezone database ([`@vvo/tzdb`](https://github.com/vvo/tzdb)). Search by city name, country, or timezone identifier.
+- **Time adjustment** — step the displayed time forward or backward by one hour using the `+` / `−` buttons, letting you quickly answer "what time will it be in Tokyo when it is 3 PM in Paris?".
+- **Persistent selection** — chosen time zones are saved in `localStorage` and restored on the next visit.
+- **Conflict-free selection** — the same timezone cannot be selected in two clocks at once; the app automatically picks a replacement when a conflict would occur.
+- **Accessible UI** — the autocomplete widget follows ARIA combobox/listbox patterns and supports full keyboard navigation (Arrow keys, Enter, Escape).
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+| Layer | Technology |
+|-------|-----------|
+| Framework | [React 19](https://react.dev/) |
+| Build tool | [Vite 8](https://vite.dev/) |
+| Timezone data | [@vvo/tzdb](https://github.com/vvo/tzdb) |
+| Compiler | [React Compiler](https://react.dev/learn/react-compiler) (via Babel) |
+| Linter | [ESLint 10](https://eslint.org/) |
 
-Note: This will impact Vite dev & build performances.
+## Getting Started
 
-## Expanding the ESLint configuration
+```bash
+# Install dependencies
+npm install
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+# Start the development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview the production build locally
+npm run preview
+```
+
+## Project Structure
+
+```
+src/
+├── App.jsx                  # Root component — manages state for all three clocks
+├── components/
+│   ├── ClockCard.jsx        # Individual clock card (display + controls)
+│   └── CityAutocomplete.jsx # Fuzzy-search autocomplete for timezone selection
+└── utils/
+    ├── time.js              # Time formatting helpers
+    ├── timezones.js         # Timezone list derived from @vvo/tzdb
+    └── fuzzySearch.js       # Client-side fuzzy filtering for the autocomplete
+```
