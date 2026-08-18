@@ -181,17 +181,6 @@ function App() {
           onDecrement={() => adjustTime(-1)}
         />
       </div>
-      <footer className="app-footer">
-        <a
-          className="github-button"
-          href="https://github.com/rakotomandimby/times"
-          data-icon="octicon-star"
-          data-size="large"
-          aria-label="Star rakotomandimby/times on GitHub"
-        >
-          Star this repository
-        </a>
-      </footer>
     </main>
   )
 }
