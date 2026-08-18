@@ -20,6 +20,16 @@ jobs:
       - name: remove the .ai-* directories
         run: rm -rfv .ai-*
 
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '24'
+
+      - name: Install dependencies
+        run: npm install
+      - name: Build the project
+        run: npm run build
+
       - name: Configure SSH for scp
         run: |
           mkdir -p ~/.ssh
@@ -27,14 +37,14 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -p 22 "${{ vars.FTP_HOST }}" >> ~/.ssh/known_hosts
 
-      - name: Deploy via FTP
+      - name: Deploy the content of dist/ to remote public/ via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.6
         with:
           server: ${{ vars.FTP_HOST }}
           username: ${{ vars.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ${{ vars.FTP_FOLDER }}
-          local-dir: ./
+          server-dir: ${{ vars.FTP_FOLDER }}public/
+          local-dir: ./dist/
           dangerous-clean-slate: true
 
 
