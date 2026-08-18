@@ -1,4 +1,4 @@
-import { formatTimeInZone, formatDateInZone } from '../utils/time.js'
+import { formatTimeInZone } from '../utils/time.js'
 
 function ClockCard({
   id,
@@ -12,15 +12,9 @@ function ClockCard({
 }) {
   const selectId = `${id}-timezone`
   const timeLabel = formatTimeInZone(time, timezone)
-  const dateLabel = formatDateInZone(time, timezone)
 
   return (
     <section className="clock-card" aria-label={label}>
-      <h2>{label}</h2>
-
-      <label className="clock-card__label" htmlFor={selectId}>
-        Timezone
-      </label>
       <select
         id={selectId}
         className="clock-card__select"
@@ -36,7 +30,6 @@ function ClockCard({
 
       <div className="clock-card__display">
         <p className="clock-card__time">{timeLabel}</p>
-        <p className="clock-card__date">{dateLabel}</p>
       </div>
 
       <div className="clock-card__controls">
