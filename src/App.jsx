@@ -4,6 +4,7 @@ import { timezones } from './utils/timezones.js'
 import './App.css'
 
 const STORAGE_KEY = 'what-times-timezones'
+const HOUR_IN_MS = 60 * 60 * 1000
 
 function isKnownTimezone(value) {
   return timezones.some((timezone) => timezone.value === value)
@@ -86,21 +87,19 @@ function App() {
 
   const adjustTime = (direction) => {
     setCurrentTime((previousTime) => {
-      const nextTime = new Date(previousTime)
-      const hasFractionalHour =
-        nextTime.getMinutes() !== 0 ||
-        nextTime.getSeconds() !== 0 ||
-        nextTime.getMilliseconds() !== 0
+      const currentTimestamp = previousTime.getTime()
+      const currentHourTimestamp = currentTimestamp - (currentTimestamp % HOUR_IN_MS)
+      const hasFractionalHour = currentTimestamp !== currentHourTimestamp
 
       if (direction > 0) {
-        nextTime.setHours(nextTime.getHours() + 1, 0, 0, 0)
-      } else if (hasFractionalHour) {
-        nextTime.setMinutes(0, 0, 0)
-      } else {
-        nextTime.setHours(nextTime.getHours() - 1, 0, 0, 0)
+        return new Date(currentHourTimestamp + HOUR_IN_MS)
       }
 
-      return nextTime
+      if (hasFractionalHour) {
+        return new Date(currentHourTimestamp)
+      }
+
+      return new Date(currentHourTimestamp - HOUR_IN_MS)
     })
   }
 
