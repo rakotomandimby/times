@@ -1,4 +1,4 @@
-import { formatTimeInZone } from '../utils/time.js'
+import { formatTimeInZone, getFranceSeasonBadge } from '../utils/time.js'
 import CityAutocomplete from './CityAutocomplete.jsx'
 
 function ClockCard({
@@ -14,6 +14,7 @@ function ClockCard({
 }) {
   const inputId = `${id}-city-input`
   const timeLabel = formatTimeInZone(time, timezone)
+  const franceSeasonBadge = getFranceSeasonBadge(time, timezone)
 
   return (
     <section className="clock-card" aria-label={label}>
@@ -26,6 +27,11 @@ function ClockCard({
 
       <div className="clock-card__display">
         <p className="clock-card__time">{timeLabel}</p>
+        {franceSeasonBadge && (
+          <p className={`clock-card__season-badge clock-card__season-badge--${franceSeasonBadge.key}`}>
+            {franceSeasonBadge.label}
+          </p>
+        )}
       </div>
 
       <div className="clock-card__controls">
@@ -59,4 +65,3 @@ function ClockCard({
 }
 
 export default ClockCard
-

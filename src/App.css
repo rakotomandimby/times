@@ -190,6 +190,26 @@
   font-variant-numeric: tabular-nums;
 }
 
+.clock-card__season-badge {
+  display: inline-block;
+  margin: 10px 0 0;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 999px;
+  line-height: 1.3;
+}
+
+.clock-card__season-badge--summer {
+  color: #7a4100;
+  background: #ffe0b2;
+}
+
+.clock-card__season-badge--winter {
+  color: #004f8a;
+  background: #d8ebff;
+}
+
 .clock-card__controls {
   display: flex;
   gap: 12px;
