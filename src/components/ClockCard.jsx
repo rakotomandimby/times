@@ -10,6 +10,7 @@ function ClockCard({
   onTimezoneChange,
   onIncrement,
   onDecrement,
+  onReset,
 }) {
   const inputId = `${id}-city-input`
   const timeLabel = formatTimeInZone(time, timezone)
@@ -35,6 +36,14 @@ function ClockCard({
           aria-label={`Subtract one hour from ${label}`}
         >
           −
+        </button>
+        <button
+          type="button"
+          className="clock-card__button"
+          onClick={onReset}
+          aria-label={`Reset ${label} to current time`}
+        >
+          Now
         </button>
         <button
           type="button"

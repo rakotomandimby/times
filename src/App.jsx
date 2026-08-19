@@ -104,6 +104,10 @@ function App() {
     })
   }
 
+  const resetTime = () => {
+    setCurrentTime(new Date())
+  }
+
   const handleTimezone1Change = (value) => {
     let nextTz2 = timezone2
     let nextTz3 = timezone3
@@ -159,6 +163,7 @@ function App() {
           onTimezoneChange={handleTimezone1Change}
           onIncrement={() => adjustTime(1)}
           onDecrement={() => adjustTime(-1)}
+          onReset={resetTime}
         />
         <ClockCard
           id="clock-2"
@@ -169,6 +174,7 @@ function App() {
           onTimezoneChange={handleTimezone2Change}
           onIncrement={() => adjustTime(1)}
           onDecrement={() => adjustTime(-1)}
+          onReset={resetTime}
         />
         <ClockCard
           id="clock-3"
@@ -179,6 +185,7 @@ function App() {
           onTimezoneChange={handleTimezone3Change}
           onIncrement={() => adjustTime(1)}
           onDecrement={() => adjustTime(-1)}
+          onReset={resetTime}
         />
       </div>
     </main>
