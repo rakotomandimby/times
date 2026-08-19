@@ -1,0 +1,6 @@
++./vite.config.js
++./eslint.config.js
++./package.json
++./src/*
++./src/**/*
+-./src/assets/*
